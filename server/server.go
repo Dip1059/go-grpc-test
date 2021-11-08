@@ -3,11 +3,11 @@ package main
 import (
 	"fmt"
 	"github.com/golang/protobuf/proto"
-	"go-grpc-test/chat"
-	"go-grpc-test/protos"
+	"google.golang.org/grpc"
+	"grpc-server/chat"
+	"grpc-server/protos"
 	"log"
 	"net"
-	"google.golang.org/grpc"
 )
 
 func main() {
@@ -32,8 +32,8 @@ func main() {
 
 func simpleProtoTest() {
 	person := &protos.Person{
-		Name: "Dipankar",
-		Age: 29,
+		Name:    "Dipankar",
+		Age:     29,
 		Address: "Khulna BD",
 	}
 	data, err := proto.Marshal(person)

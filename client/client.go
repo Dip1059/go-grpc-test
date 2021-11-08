@@ -1,14 +1,14 @@
 package main
 
 import (
-	"log"
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
-	"go-grpc-test/chat"
+	"grpc-client/chat"
+	"log"
 )
 
 func main() {
-	conn, err := grpc.Dial(":9000", grpc.WithInsecure())
+	conn, err := grpc.Dial("grpc-server:9000", grpc.WithInsecure())
 	if err != nil {
 		log.Println(err.Error())
 	}
