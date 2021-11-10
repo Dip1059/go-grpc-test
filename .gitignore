@@ -1,0 +1,4 @@
+certs/*.pem
+certs/*.srl
+client/*.pem
+server/*.pem

@@ -3,12 +3,17 @@ package main
 import (
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials"
 	"grpc-client/chat"
 	"log"
 )
 
 func main() {
-	conn, err := grpc.Dial("grpc-server:9000", grpc.WithInsecure())
+	creds, err := credentials.NewClientTLSFromFile("server-cert.pem", "")
+	if err != nil {
+		log.Println(err.Error())
+	}
+	conn, err := grpc.Dial("grpc-server:9000", grpc.WithTransportCredentials(creds))
 	if err != nil {
 		log.Println(err.Error())
 	}
@@ -20,5 +25,5 @@ func main() {
 	if err != nil {
 		log.Println(err.Error())
 	}
-	log.Printf("Message from server: %s", message.Body)
+	log.Printf("Message from Server: %s", message.Body)
 }

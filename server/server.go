@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/golang/protobuf/proto"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials"
 	"grpc-server/chat"
 	"grpc-server/protos"
 	"log"
@@ -21,7 +22,12 @@ func main() {
 	}
 
 	s := &chat.Server{}
-	grpcServer := grpc.NewServer()
+
+	creds, err := credentials.NewServerTLSFromFile("server-cert.pem", "server-key.pem")
+	if err != nil {
+		log.Println(err.Error())
+	}
+	grpcServer := grpc.NewServer(grpc.Creds(creds))
 
 	chat.RegisterChatServiceServer(grpcServer, s)
 
