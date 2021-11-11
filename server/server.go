@@ -4,12 +4,14 @@ import (
 	"fmt"
 	"github.com/golang/protobuf/proto"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
+	"github.com/joho/godotenv"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
 	"grpc-server/chat"
 	"grpc-server/protos"
 	"log"
 	"net"
+	"os"
 )
 
 func migrate() {
@@ -21,11 +23,15 @@ func migrate() {
 func main() {
 	//proto test
 	//simpleProtoTest()
-
+	err := godotenv.Load()
+	if err != nil {
+		log.Println(err.Error())
+		return
+	}
 	migrate()
 
 	//grpc test
-	lis, err := net.Listen("tcp", ":9000")
+	lis, err := net.Listen("tcp", ":"+os.Getenv("APP_PORT"))
 	if err != nil {
 		log.Println(err.Error())
 	}

@@ -8,9 +8,9 @@ services:
     ports:
       - 5430:5432
     environment:
-      POSTGRES_PASSWORD: 123456
-      POSTGRES_USER: itech
-      POSTGRES_DB: chat_db
+      POSTGRES_PASSWORD: "${DB_PASSWORD}"
+      POSTGRES_USER: "${DB_USERNAME}"
+      POSTGRES_DB: "${DB_NAME}"
 #    restart: always
 
   pgadmin:
@@ -33,7 +33,7 @@ services:
 #    image: grpc-server
     ports:
       - 9001:9000
-    container_name: "grpc-server"
+    container_name: "${CHAT_SERVER_HOST}"
     depends_on:
       - db
 #    restart: always

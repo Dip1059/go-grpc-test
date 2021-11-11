@@ -4,13 +4,22 @@ import (
 	"github.com/jinzhu/gorm"
 	"golang.org/x/net/context"
 	"log"
+	"os"
 )
 
 func DBconnect() *gorm.DB {
-	db, err := gorm.Open("postgres", "host=db port=5432 user=itech dbname=chat_db password=123456 sslmode=disable")
+	var db *gorm.DB
+	var err error
+	if os.Getenv("DB_DIALECT") == "mysql" {
+		db, err = gorm.Open("mysql", os.Getenv("DB_USERNAME")+":"+os.Getenv("DB_PASSWORD")+"@tcp("+os.Getenv("DB_HOST")+":"+
+			os.Getenv("DB_PORT")+")/"+os.Getenv("DB_NAME")+"?parseTime=true")
+	} else if os.Getenv("DB_DIALECT") == "postgres" {
+		db, err = gorm.Open("postgres", "host="+os.Getenv("DB_HOST")+" port="+os.Getenv("DB_PORT")+" user="+os.Getenv("DB_USERNAME")+
+			" dbname="+os.Getenv("DB_NAME")+" password="+os.Getenv("DB_PASSWORD")+" sslmode=disable")
+	}
 	if err != nil {
 		log.Println("log", err.Error())
-		return nil
+		return db
 	}
 	return db
 }

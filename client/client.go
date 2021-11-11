@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/joho/godotenv"
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
@@ -9,6 +10,7 @@ import (
 	"html/template"
 	"log"
 	"net/http"
+	"os"
 )
 
 type Message struct {
@@ -21,6 +23,11 @@ var (
 )
 
 func main() {
+	err := godotenv.Load()
+	if err != nil {
+		log.Println(err.Error())
+		return
+	}
 	engine := gin.Default()
 	engine.Static("/assets", "./")
 	engine.LoadHTMLGlob("views/**/*.gohtml")
@@ -52,7 +59,7 @@ func main() {
 		c.Redirect(http.StatusFound, c.Request.Referer())
 		return
 	})
-	err := engine.Run(":9020")
+	err = engine.Run(":9020")
 	if err != nil {
 		log.Println(err.Error())
 		return
@@ -64,7 +71,7 @@ func getChatClient() (*grpc.ClientConn, chat.ChatServiceClient) {
 	if err != nil {
 		log.Println(err.Error())
 	}
-	conn, err := grpc.Dial("grpc-server:9000", grpc.WithTransportCredentials(creds))
+	conn, err := grpc.Dial(os.Getenv("CHAT_SERVER_HOST")+":"+os.Getenv("CHAT_SERVER_PORT"), grpc.WithTransportCredentials(creds))
 	if err != nil {
 		log.Println(err.Error())
 	}
