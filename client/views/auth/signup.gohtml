@@ -4,6 +4,9 @@
         <title>Signup</title>
     </head>
     <body>
+        {{if or (ne .Msg.Success "") (ne .Msg.Fail "")}}
+            <h5>{{.Msg.Success}} {{.Msg.Fail}}</h5>
+        {{end}}
         <form action="/signup" method="post">
             <input name="name" type="text" placeholder="Name" />
             <br>

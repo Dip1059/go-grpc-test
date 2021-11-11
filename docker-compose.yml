@@ -16,7 +16,7 @@ services:
   pgadmin:
     image: dpage/pgadmin4
     volumes:
-      - pgadmin_server:/pgadmin4/servers.json
+      - pgadmin_data:/var/lib/pgadmin
     environment:
       PGADMIN_DEFAULT_EMAIL: user@domain.com
       PGADMIN_DEFAULT_PASSWORD: SuperSecret
@@ -51,4 +51,4 @@ services:
 
 volumes:
   db_data:
-  pgadmin_server:
+  pgadmin_data:
