@@ -1,19 +1,54 @@
 version: "3"
 
 services:
+  db:
+    image: postgres
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    ports:
+      - 5430:5432
+    environment:
+      POSTGRES_PASSWORD: 123456
+      POSTGRES_USER: itech
+      POSTGRES_DB: chat_db
+#    restart: always
+
+  pgadmin:
+    image: dpage/pgadmin4
+    volumes:
+      - pgadmin_server:/pgadmin4/servers.json
+    environment:
+      PGADMIN_DEFAULT_EMAIL: user@domain.com
+      PGADMIN_DEFAULT_PASSWORD: SuperSecret
+    ports:
+      - 8081:80
+    depends_on:
+      - db
+#    restart: always
+
   grpc-server:
     build: ./server
     volumes:
       - ./server:/home/grpc-test/server
 #    image: grpc-server
     ports:
-      - 9000:9000
+      - 9001:9000
     container_name: "grpc-server"
+    depends_on:
+      - db
+#    restart: always
+
   grpc-client:
     build: ./client
     volumes:
       - ./client:/home/grpc-test/client
+    ports:
+      - 9021:9020
 #    image: grpc-client
-    restart: always
     depends_on:
       - grpc-server
+#    restart: always
+
+volumes:
+  db_data:
+  pgadmin_server:

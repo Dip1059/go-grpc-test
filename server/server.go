@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/golang/protobuf/proto"
+	_ "github.com/jinzhu/gorm/dialects/postgres"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
 	"grpc-server/chat"
@@ -11,9 +12,17 @@ import (
 	"net"
 )
 
+func migrate() {
+	db := chat.DBconnect()
+	db.AutoMigrate(&chat.User{})
+	db.AutoMigrate(&chat.Message{})
+}
+
 func main() {
 	//proto test
-	simpleProtoTest()
+	//simpleProtoTest()
+
+	migrate()
 
 	//grpc test
 	lis, err := net.Listen("tcp", ":9000")

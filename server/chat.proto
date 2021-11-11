@@ -1,11 +1,21 @@
 syntax = "proto3";
+package chat;
 
 option go_package = "/chat";
 
 message Message {
   string body = 1;
+  uint32 user_id = 2;
+}
+
+message User {
+  uint32 id = 1;
+  string email = 2;
+  string name = 3;
+  repeated Message messages = 4;
 }
 
 service ChatService {
+  rpc Signup(User) returns (User) {};
   rpc SayHello(Message) returns (Message) {};
 }
